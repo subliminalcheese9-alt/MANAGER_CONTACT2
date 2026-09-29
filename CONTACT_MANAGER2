@@ -1,0 +1,63 @@
+class Contact2:
+        def __init__(self, name, phone, email):
+            self.name = name
+            self.phone = phone
+            self.email = email
+        def __str__(self):
+            return f"{self.name} - {self.phone} - {self.email}"
+
+import Contact2
+import json
+class ContactManager2:
+        def __init__(self):
+            self.n = 1
+            try:
+                with open("contacts2.json", 'r') as file14:
+                    jsonInfo = json.load(file14)
+                    self.contacts = jsonInfo
+            except (FileNotFoundError, json.JSONDecodeError):
+                self.contacts = [ ]
+        def add_contact(self):
+            choiceName = input("What's Your Name?").lower().strip()
+            choicePhone = input(f"Great, {choiceName}! What's Your Phone Number?").lower().strip()
+            choiceEmail = input("Finally, What's Your Email?").lower().strip()
+            c = Contact2.Contact2(choiceName, choicePhone, choiceEmail)
+            dict1 = {"id": self.n, "name": c.name, "phone": c.phone, "email": c.email}
+            with open("contacts2.json", 'w') as file14:
+                json.dump(self.contacts, file14)
+                self.n = self.n + 1
+            self.contacts.append(dict1)
+        def show_all(self):
+            for c in self.contacts:
+                print(c)
+        def search(self):
+            choiceMatch = input('Who Do You Want To Search? (Name)').lower().strip()
+            for c in self.contacts:
+                if c["name"] == choiceMatch:
+                    print(c)
+        def delete(self):
+            choiceDel = input('Who Do You Want To Delete? (Name)').lower().strip()
+            for c in self.contacts:
+                if c["name"] == choiceDel:
+                    self.contacts = [c for c in self.contacts if c["name"] != choiceDel]
+                    with open("contacts2.json", 'w') as file14:
+                        json.dump(self.contacts, file14)
+
+import ContactManager2
+def main():
+        manager = ContactManager2.ContactManager2()
+        while True:
+            choice3 = input('Welcome To PythonContactManager! 1 - Add A Contact, 2 - Show All, 3 - Search, 4 - Delete, 5 - Quit').lower().strip()
+            if choice3 == 'add a contact' or choice3 == '1':
+                manager.add_contact()
+            elif choice3 == 'show all' or choice3 == '2':
+                manager.show_all()
+            elif choice3 == 'search' or choice3 == '3':
+                manager.search()
+            elif choice3 == 'delete' or choice3 == '4':
+                manager.delete()
+            elif choice3 == 'quit' or choice3 == '5':
+                print('Goodbye!')
+                break
+if __name__ == "__main__":
+        main()
